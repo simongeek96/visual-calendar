@@ -37,6 +37,7 @@ Temporary Items
 dist
 node_modules
 vizcal
+calendarvizual
 .tmp
 webpack.statistics.dev.html
 webpack.statistics.prod.html
