@@ -38,6 +38,7 @@ dist
 node_modules
 vizcal
 calendarvizual
+lilchartbar
 .tmp
 webpack.statistics.dev.html
 webpack.statistics.prod.html
