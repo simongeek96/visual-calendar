@@ -37,7 +37,7 @@ Temporary Items
 dist
 node_modules
 vizcal
-calendarvizual
+calendarvisual
 lilchartbar
 .tmp
 webpack.statistics.dev.html
