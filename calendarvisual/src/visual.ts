@@ -53,70 +53,73 @@ export class Visual implements IVisual {
     }
 
     public update(options: VisualUpdateOptions) {
-
-        const date_picker_element = document.querySelector('.date-picker');
-        const selected_date_element = document.querySelector('.date-picker .selected-date');
-        const dates_element = document.querySelector('.date-picker .dates');
-        const mth_element = document.querySelector('.date-picker .dates .month .mth');
-        const next_mth_element = document.querySelector('.date-picker .dates .month .next-mth');
-        const prev_mth_element = document.querySelector('.date-picker .dates .month .prev-mth');
-        const weekDays_element = document.querySelector('.date-picker .dates .week');
-        const days_element = document.querySelector('.date-picker .dates .days');
-
-
-        const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-        const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-
-        date_picker_element.addEventListener('click', toggleDatePicker);
+        try {
+            const date_picker_element = document.querySelector('.date-picker');
+            const selected_date_element = document.querySelector('.date-picker .selected-date');
+            const dates_element = document.querySelector('.date-picker .dates');
+            const mth_element = document.querySelector('.date-picker .dates .month .mth');
+            const next_mth_element = document.querySelector('.date-picker .dates .month .next-mth');
+            const prev_mth_element = document.querySelector('.date-picker .dates .month .prev-mth');
+            const weekDays_element = document.querySelector('.date-picker .dates .week');
+            const days_element = document.querySelector('.date-picker .dates .days');
 
 
-        let date = new Date();
-        let day = date.getDate();
-        let dayOfWeek = date.getDay();
-        let month = date.getMonth();
-        let year = date.getFullYear();
+            const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+            const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-        let selectedDate = date;
-        let selectedDay = day;
-        let selectedMonth = month;
-        let selectedYear = year;
-        let selectedDayOfWeek = dayOfWeek;
+            //  На этой строке падает, потому что здесь date_picker_element равен null
+            date_picker_element.addEventListener('click', toggleDatePicker);
 
-        mth_element.textContent = months[month] + ' ' + year;
+            let date = new Date();
+            let day = date.getDate();
+            let dayOfWeek = date.getDay();
+            let month = date.getMonth();
+            let year = date.getFullYear();
+
+            let selectedDate = date;
+            let selectedDay = day;
+            let selectedMonth = month;
+            let selectedYear = year;
+            let selectedDayOfWeek = dayOfWeek;
+
+            mth_element.textContent = months[month] + ' ' + year;
 
 
-        date_picker_element.addEventListener('click', toggleDatePicker);
+            date_picker_element.addEventListener('click', toggleDatePicker);
 
 
-        function toggleDatePicker(e) {
-            if (!checkEventPathForClass(e.path, 'dates')) {
-                dates_element.classList.toggle('active');
-            }
-        }
-
-        function checkEventPathForClass(path, selector) {
-            for (let i = 0; i < path.length; i++) {
-                if (path[i].classList && path[i].classList.contains(selector)) {
-                    return true;
+            function toggleDatePicker(e) {
+                if (!checkEventPathForClass(e.path, 'dates')) {
+                    dates_element.classList.toggle('active');
                 }
             }
 
-            return false;
-        }
+            function checkEventPathForClass(path, selector) {
+                for (let i = 0; i < path.length; i++) {
+                    if (path[i].classList && path[i].classList.contains(selector)) {
+                        return true;
+                    }
+                }
 
-        function formatDate(d) { //formatting calendar
-            let day = d.getDate();
-            if (day < 10) {
-                day = '0' + day;
+                return false;
             }
-            let month = d.getMonth() + 1;
-            if (month < 10) {
-                month = '0' + month;
-            }
-            let year = d.getFullYear();
-            return day + '.' + month + '.' + year;
-        }
 
+            function formatDate(d) { //formatting calendar
+                let day = d.getDate();
+                if (day < 10) {
+                    day = '0' + day;
+                }
+                let month = d.getMonth() + 1;
+                if (month < 10) {
+                    month = '0' + month;
+                }
+                let year = d.getFullYear();
+                return day + '.' + month + '.' + year;
+            }
+        }
+        catch (e) {
+            debugger;
+        }
     }
 
     private static parseSettings(dataView: DataView): VisualSettings {
