@@ -14,7 +14,7 @@
         ]
     },
     "files": [
-        "./src/visual.ts"
-        //"node_modules/@types/d3/index.d.ts"
+        "./src/visual.ts",
+        "node_modules/@types/d3/index.d.ts"
     ]
 }
