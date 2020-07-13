@@ -45,6 +45,7 @@ export class Visual implements IVisual {
 
 
     constructor(options: VisualConstructorOptions) {
+       try{
         debugger;
         this.root =d3.select(options.element);
 
@@ -59,6 +60,10 @@ export class Visual implements IVisual {
             .append("div")
             .classed("date-picker", true);
 
+       } 
+        catch (e) {
+            debugger;
+        }
     }
 
     public update(options: VisualUpdateOptions) {
