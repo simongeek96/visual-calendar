@@ -39,21 +39,31 @@ import VisualObjectInstanceEnumerationObject = powerbi.VisualObjectInstanceEnume
 import { VisualSettings } from "./settings";
 import * as d3 from "d3";
 export class Visual implements IVisual {
-
+    private root: d3.Selection<any>;
     private svg: d3.Selection<SVGElement>;
     calendar: d3.Selection<SVGElement>;
 
 
     constructor(options: VisualConstructorOptions) {
-        this.svg = d3.select(options.element)
+        debugger;
+        this.root =d3.select(options.element);
+
+        this.svg = this.root
             .append("svg")
             .classed("calendar-visual", true);
+
         this.calendar = this.svg.append("g")
             .classed("calendar", true);
+
+        this.root
+            .append("div")
+            .classed("date-picker", true);
+
     }
 
     public update(options: VisualUpdateOptions) {
         try {
+            debugger;
             const date_picker_element = document.querySelector('.date-picker');
             const selected_date_element = document.querySelector('.date-picker .selected-date');
             const dates_element = document.querySelector('.date-picker .dates');
