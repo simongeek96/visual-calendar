@@ -45,22 +45,22 @@ export class Visual implements IVisual {
 
 
     constructor(options: VisualConstructorOptions) {
-       try{
-        debugger;
-        this.root =d3.select(options.element);
+        try {
+            debugger;
+            this.root = d3.select(options.element);
 
-        this.svg = this.root
-            .append("svg")
-            .classed("calendar-visual", true);
+            this.svg = this.root
+                .append("svg")
+                .classed("calendar-visual", true);
 
-        this.calendar = this.svg.append("g")
-            .classed("calendar", true);
+            this.calendar = this.svg.append("g")
+                .classed("calendar", true);
 
-        this.root
-            .append("div")
-            .classed("date-picker", true);
+            this.root
+                .append("div")
+                .classed("date-picker", true);
 
-       } 
+        }
         catch (e) {
             debugger;
         }
@@ -119,6 +119,15 @@ export class Visual implements IVisual {
                 return false;
             }
 
+            function populatedates(e) {
+                let datePickerHeight = 20;
+                let datePickerWidth = 80;
+                d3.select("svg")
+                    .selectAll("rect")
+                    .data()
+
+            }
+
             function formatDate(d) { //formatting calendar
                 let day = d.getDate();
                 if (day < 10) {
@@ -135,6 +144,7 @@ export class Visual implements IVisual {
         catch (e) {
             debugger;
         }
+
     }
 
     private static parseSettings(dataView: DataView): VisualSettings {
