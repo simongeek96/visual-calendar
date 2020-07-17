@@ -120,11 +120,13 @@ export class Visual implements IVisual {
             }
 
             function populatedates(e) {
-                let datePickerHeight = 20;
+                let datePickerHeight = 60;
                 let datePickerWidth = 80;
                 d3.select("svg")
                     .selectAll("rect")
                     .data()
+                    //.enter()
+                   // .append("rect")
 
             }
 
