@@ -20,215 +20,215 @@ export class Visual implements IVisual {
 
 
     constructor(options: VisualConstructorOptions) {
-      
-            this.root = d3.select(options.element);
+
+        this.root = d3.select(options.element);
 
 
-            let main = this.root
-                .append("div")
-                .classed("main", true);
+        let main = this.root
+            .append("div")
+            .classed("main", true);
 
-            let datePicker = main
-                .append("div")
-                .classed("date-picker", true);
+        let datePicker = main
+            .append("div")
+            .classed("date-picker", true);
 
-            datePicker
-                .append("div")
-                .classed("selected-date", true)
-                .append("span");
+        datePicker
+            .append("div")
+            .classed("selected-date", true)
+            .append("span");
 
-            let dates = datePicker
-                .append("div")
-                .classed("dates", true);
+        let dates = datePicker
+            .append("div")
+            .classed("dates", true);
 
-            let month = dates
-                .append("div")
-                .classed("month", true);
+        let month = dates
+            .append("div")
+            .classed("month", true);
 
-            month
-                .append("div")
-                .classed("arrows", true)
-                .classed("prev-mth", true)
-                .text("<");
+        month
+            .append("div")
+            .classed("arrows", true)
+            .classed("prev-mth", true)
+            .text("<");
 
-            month
-                .append("div")
-                .classed("mth", true);
+        month
+            .append("div")
+            .classed("mth", true);
 
-            month
-                .append("div")
-                .classed("arrows", true)
-                .classed("next-mth", true)
-                .text(">");
+        month
+            .append("div")
+            .classed("arrows", true)
+            .classed("next-mth", true)
+            .text(">");
 
-            const week = dates
-                .append("div")
-                .classed("week", true);
+        const week = dates
+            .append("div")
+            .classed("week", true);
 
-            let weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+        let weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-            for (const weekDay of weekDays) {
-                week
-                    .append("span")
-                    .text(weekDay);
-            }
+        for (const weekDay of weekDays) {
+            week
+                .append("span")
+                .text(weekDay);
+        }
 
-            let days = dates
-                .append("div")
-                .classed("days", true);
+        let days = dates
+            .append("div")
+            .classed("days", true);
 
-            days
-                .append("div")
-                .classed("day", true);
-          
-   }
+        days
+            .append("div")
+            .classed("day", true);
+
+    }
 
 
     public update(options: VisualUpdateOptions) {
-     
-            debugger;
-            const date_picker_element = document.querySelector('.date-picker');
-            const selected_date_element = document.querySelector('.date-picker .selected-date');
-            const dates_element = document.querySelector('.date-picker .dates');
-            const mth_element = document.querySelector('.date-picker .dates .month .mth');
-            const next_mth_element = document.querySelector('.date-picker .dates .month .next-mth');
-            const prev_mth_element = document.querySelector('.date-picker .dates .month .prev-mth');
-            const weekDays_element = document.querySelector('.date-picker .dates .week');
-            const days_element = document.querySelector('.date-picker .dates .days');
+
+        debugger;
+        const date_picker_element = document.querySelector('.date-picker');
+        const selected_date_element = document.querySelector('.date-picker .selected-date');
+        const dates_element = document.querySelector('.date-picker .dates');
+        const mth_element = document.querySelector('.date-picker .dates .month .mth');
+        const next_mth_element = document.querySelector('.date-picker .dates .month .next-mth');
+        const prev_mth_element = document.querySelector('.date-picker .dates .month .prev-mth');
+        const weekDays_element = document.querySelector('.date-picker .dates .week');
+        const days_element = document.querySelector('.date-picker .dates .days');
 
 
-            const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
-            const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+        const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
+        const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-            date_picker_element.addEventListener('click', toggleDatePicker);
+        date_picker_element.addEventListener('click', toggleDatePicker);
 
-            let date = new Date();
-            let day = date.getDate();
-            let dayOfWeek = date.getDay();
-            let month = date.getMonth();
-            let year = date.getFullYear();
+        let date = new Date();
+        let day = date.getDate();
+        let dayOfWeek = date.getDay();
+        let month = date.getMonth();
+        let year = date.getFullYear();
 
-            let selectedDate = date;
-            let selectedDay = day;
-            let selectedMonth = month;
-            let selectedYear = year;
-            let selectedDayOfWeek = dayOfWeek;
+        let selectedDate = date;
+        let selectedDay = day;
+        let selectedMonth = month;
+        let selectedYear = year;
+        let selectedDayOfWeek = dayOfWeek;
 
+        mth_element.textContent = months[month] + ' ' + year;
+
+        selected_date_element.textContent = formatDate(date);
+
+
+        populateDates();
+
+        date_picker_element.addEventListener('click', toggleDatePicker);
+        next_mth_element.addEventListener('click', goToNextMonth);
+        prev_mth_element.addEventListener('click', goToPrevMonth);
+
+
+        function toggleDatePicker(e) {
+            if (!checkEventPathForClass(e.path, 'dates')) {
+                dates_element.classList.toggle('active');
+            }
+        }
+
+        function checkEventPathForClass(path, selector) {
+            for (let i = 0; i < path.length; i++) {
+                if (path[i].classList && path[i].classList.contains(selector)) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        function goToNextMonth(e) { //switching to next month
+            month++;
+            if (month > 11) {
+                month = 0;
+                year++;
+            }
             mth_element.textContent = months[month] + ' ' + year;
-
-            selected_date_element.textContent = formatDate(date);
-
             populateDates();
+        }
 
-            date_picker_element.addEventListener('click', toggleDatePicker);
-            next_mth_element.addEventListener('click', goToNextMonth);
-            prev_mth_element.addEventListener('click', goToPrevMonth);
+        function goToPrevMonth(e) { //switching to prev. month
+            month--;
+            if (month < 0) {
+                month = 11;
+                year--;
+            }
+            mth_element.textContent = months[month] + ' ' + year;
+            populateDates();
+        }
+
+        window.addEventListener('keydown', function (e) { //switching from arrow keys
+            if (e.keyCode == 37) {
+                goToPrevMonth(e);
+            }
+            if (e.keyCode == 39) {
+                goToNextMonth(e);
+            }
+        });
+
+        function populateDates() {  //rendering calendar
+            days_element.innerHTML = '';
+
+            let currentDate = new Date(year, month, 1);
+            let weekDay = currentDate.getDay();
+            weekDay = weekDay === 0 ? 7 : weekDay;
+            currentDate.setDate(currentDate.getDate() - (weekDay - 1));
 
 
-            function toggleDatePicker(e) {
-                if (!checkEventPathForClass(e.path, 'dates')) {
-                    dates_element.classList.toggle('active');
-                }
+
+            function daysInMonth(month, year) {
+                return new Date(year, month + 1, 0).getDate();
             }
 
-            function checkEventPathForClass(path, selector) {
-                for (let i = 0; i < path.length; i++) {
-                    if (path[i].classList && path[i].classList.contains(selector)) {
-                        return true;
-                    }
+
+            for (let i = 0; i < 42; i++) {
+                let day = currentDate.getDate();
+                const day_element = document.createElement('div');
+                day_element.classList.add('day');
+                day_element.textContent = day.toString();
+
+
+
+                if (currentDate.getMonth() != month) {
+                    day_element.style.color = "gray";
                 }
 
-                return false;
+                if (selectedDay == day && selectedYear == year && selectedMonth == month) {
+                    days_element.classList.add('selected');
+                }
+
+                day_element.addEventListener('click', function () { //выбор определённой даты
+                    selectedDate = new Date(year + '-' + (month + 1) + '-' + day);
+                    selectedDay = day;
+                    selectedMonth = month;
+                    selectedYear = year;
+                    selectedDayOfWeek = dayOfWeek;
+                    selected_date_element.textContent = formatDate(selectedDate);
+                    populateDates();
+                });
+
+                days_element.appendChild(day_element);
+                currentDate.setDate(currentDate.getDate() + 1);
             }
+        }
 
-            function goToNextMonth(e) { //switching to next month
-                month++;
-                if (month > 11) {
-                    month = 0;
-                    year++;
-                }
-                mth_element.textContent = months[month] + ' ' + year;
-                populateDates();
+        function formatDate(d) { //formatting calendar
+            let day = d.getDate();
+            if (day < 10) {
+                day = '0' + day;
             }
-
-            function goToPrevMonth(e) { //switching to prev. month
-                month--;
-                if (month < 0) {
-                    month = 11;
-                    year--;
-                }
-                mth_element.textContent = months[month] + ' ' + year;
-                populateDates();
+            let month = d.getMonth() + 1;
+            if (month < 10) {
+                month = '0' + month;
             }
-
-            window.addEventListener('keydown', function (e) { //switching from arrow keys
-                if (e.keyCode == 37) {
-                    goToPrevMonth(e);
-                }
-                if (e.keyCode == 39) {
-                    goToNextMonth(e);
-                }
-            });
-
-            function populateDates() {  //rendering calendar
-                days_element.innerHTML = '';
-
-                let currentDate = new Date(year, month, 1);
-                let weekDay = currentDate.getDay();
-                weekDay = weekDay === 0 ? 7 : weekDay;
-                currentDate.setDate(currentDate.getDate() - (weekDay - 1));
-
-
-
-                function daysInMonth(month, year) {
-                    return new Date(year, month + 1, 0).getDate();
-                }
-
-
-                for (let i = 0; i < 42; i++) {
-                    let day = currentDate.getDate();
-                    const day_element = document.createElement('div');
-                    day_element.classList.add('day');
-                    day_element.textContent = day.toString();
-
-
-
-                    if (currentDate.getMonth() != month) {
-                        day_element.style.color = "gray";
-                    }
-
-                    if (selectedDay == day && selectedYear == year && selectedMonth == month) {
-                        days_element.classList.add('selected');
-                    }
-
-                    day_element.addEventListener('click', function () { //выбор определённой даты
-                        selectedDate = new Date(year + '-' + (month + 1) + '-' + day);
-                        selectedDay = day;
-                        selectedMonth = month;
-                        selectedYear = year;
-                        selectedDayOfWeek = dayOfWeek;
-                        selected_date_element.textContent = formatDate(selectedDate);
-                        //selected_date_element.dataset.value = selectedDate;
-                        populateDates();
-                    });
-
-                    days_element.appendChild(day_element);
-                    currentDate.setDate(currentDate.getDate() + 1);
-                }
-            }
-
-            function formatDate(d) { //formatting calendar
-                let day = d.getDate();
-                if (day < 10) {
-                    day = '0' + day;
-                }
-                let month = d.getMonth() + 1;
-                if (month < 10) {
-                    month = '0' + month;
-                }
-                let year = d.getFullYear();
-                return day + '.' + month + '.' + year;
-            }
+            let year = d.getFullYear();
+            return day + '.' + month + '.' + year;
+        }
 
     }
 
