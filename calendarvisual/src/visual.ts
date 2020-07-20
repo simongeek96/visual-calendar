@@ -1,28 +1,3 @@
-/*
-*  Power BI Visual CLI
-*
-*  Copyright (c) Microsoft Corporation
-*  All rights reserved.
-*  MIT License
-*
-*  Permission is hereby granted, free of charge, to any person obtaining a copy
-*  of this software and associated documentation files (the ""Software""), to deal
-*  in the Software without restriction, including without limitation the rights
-*  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-*  copies of the Software, and to permit persons to whom the Software is
-*  furnished to do so, subject to the following conditions:
-*
-*  The above copyright notice and this permission notice shall be included in
-*  all copies or substantial portions of the Software.
-*
-*  THE SOFTWARE IS PROVIDED *AS IS*, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-*  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-*  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-*  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-*  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-*  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-*  THE SOFTWARE.
-*/
 "use strict";
 
 import "core-js/stable";
@@ -49,7 +24,67 @@ export class Visual implements IVisual {
             debugger;
             this.root = d3.select(options.element);
 
-            this.svg = this.root
+
+            let main = this.root
+                .append("div")
+                .classed("main", true);
+
+            let datePicker = main
+                .append("div")
+                .classed("date-picker", true);
+
+            datePicker
+                .append("div")
+                .classed("selected-date", true)
+                .append("span");
+
+            let dates = datePicker
+                .append("div")
+                .classed("dates", true);
+
+            let month = dates
+                .append("div")
+                .classed("month", true);
+
+            month
+                .append("div")
+                .classed("arrows", true)
+                .classed("prev-mth", true)
+                .text("<");
+
+            month
+                .append("div")
+                .classed("mth", true);
+
+            month
+                .append("div")
+                .classed("arrows", true)
+                .classed("next-mth", true)
+                .text(">");
+
+            const week = dates
+                .append("div")
+                .classed("week", true);
+
+            let weekDays = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
+
+            for (const weekDay of weekDays) {
+                week
+                    .append("span")
+                    .text(weekDay);
+            }
+
+            let days = dates
+                .append("div")
+                .classed("days", true);
+
+            days
+                .append("div")
+                .classed("day", true);
+
+
+
+            /*this.svg = this.root
                 .append("svg")
                 .classed("calendar-visual", true);
 
@@ -58,7 +93,7 @@ export class Visual implements IVisual {
 
             this.root
                 .append("div")
-                .classed("date-picker", true);
+                .classed("date-picker", true);*/
 
         }
         catch (e) {
@@ -99,6 +134,10 @@ export class Visual implements IVisual {
 
             mth_element.textContent = months[month] + ' ' + year;
 
+            selected_date_element.textContent = formatDate(date);
+            //selected_date_element.dataset.value = selectedDate;
+
+            populateDates();
 
             date_picker_element.addEventListener('click', toggleDatePicker);
 
@@ -119,15 +158,80 @@ export class Visual implements IVisual {
                 return false;
             }
 
-            function populatedates(e) {
-                let datePickerHeight = 60;
-                let datePickerWidth = 80;
-                d3.select("svg")
-                    .selectAll("rect")
-                    .data()
-                    //.enter()
-                   // .append("rect")
+            function goToNextMonth(e) { //switching to next month
+                month++;
+                if (month > 11) {
+                  month = 0;
+                  year++;
+                }
+                mth_element.textContent = months[month] + ' ' + year;
+                populateDates();
+              }
+              
+              function goToPrevMonth(e) { //switching to prev. month
+                month--;
+                if (month < 0) {
+                  month = 11;
+                  year--;
+                }
+                mth_element.textContent = months[month] + ' ' + year;
+                populateDates();
+              }
 
+            window.addEventListener('keydown', function (e) { //switching from arrow keys
+                if (e.keyCode == 37) {
+                  goToPrevMonth(e);
+                }
+                if (e.keyCode == 39) {
+                  goToNextMonth(e);
+                }
+              });
+
+            function populateDates() {  //rendering calendar
+                days_element.innerHTML = '';
+
+                let currentDate = new Date(year, month, 1);
+                let weekDay = currentDate.getDay();
+                weekDay = weekDay === 0 ? 7 : weekDay;
+                currentDate.setDate(currentDate.getDate() - (weekDay - 1));
+
+
+
+                function daysInMonth(month, year) {
+                    return new Date(year, month + 1, 0).getDate();
+                }
+
+
+                for (let i = 0; i < 42; i++) {
+                    let day = currentDate.getDate();
+                    const day_element = document.createElement('div');
+                    day_element.classList.add('day');
+                    //day_element.textContent = day;
+
+
+
+                    if (currentDate.getMonth() != month) {
+                        day_element.style.color = "gray";
+                    }
+
+                    if (selectedDay == day && selectedYear == year && selectedMonth == month) {
+                        days_element.classList.add('selected');
+                    }
+
+                    day_element.addEventListener('click', function () { //выбор определённой даты
+                        selectedDate = new Date(year + '-' + (month + 1) + '-' + day);
+                        selectedDay = day;
+                        selectedMonth = month;
+                        selectedYear = year;
+                        selectedDayOfWeek = dayOfWeek;
+                        selected_date_element.textContent = formatDate(selectedDate);
+                        //selected_date_element.dataset.value = selectedDate;
+                        populateDates();
+                    });
+
+                    days_element.appendChild(day_element);
+                    currentDate.setDate(currentDate.getDate() + 1);
+                }
             }
 
             function formatDate(d) { //formatting calendar
