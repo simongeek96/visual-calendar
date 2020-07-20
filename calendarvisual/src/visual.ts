@@ -201,7 +201,7 @@ export class Visual implements IVisual {
                     days_element.classList.add('selected');
                 }
 
-                day_element.addEventListener('click', function () { //выбор определённой даты
+                day_element.addEventListener('click', function () { //choosing some date
                     selectedDate = new Date(year + '-' + (month + 1) + '-' + day);
                     selectedDay = day;
                     selectedMonth = month;
