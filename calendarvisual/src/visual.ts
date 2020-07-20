@@ -113,6 +113,8 @@ export class Visual implements IVisual {
         let selectedYear = year;
         let selectedDayOfWeek = dayOfWeek;
 
+        let monthAndYear = document.getElementsByClassName('dates');
+
         mth_element.textContent = months[month] + ' ' + year;
 
         selected_date_element.textContent = formatDate(date);
