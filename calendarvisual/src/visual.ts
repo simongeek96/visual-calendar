@@ -20,8 +20,7 @@ export class Visual implements IVisual {
 
 
     constructor(options: VisualConstructorOptions) {
-        try {
-            debugger;
+      
             this.root = d3.select(options.element);
 
 
@@ -81,28 +80,12 @@ export class Visual implements IVisual {
             days
                 .append("div")
                 .classed("day", true);
+          
+   }
 
-
-
-            /*this.svg = this.root
-                .append("svg")
-                .classed("calendar-visual", true);
-
-            this.calendar = this.svg.append("g")
-                .classed("calendar", true);
-
-            this.root
-                .append("div")
-                .classed("date-picker", true);*/
-
-        }
-        catch (e) {
-            debugger;
-        }
-    }
 
     public update(options: VisualUpdateOptions) {
-        try {
+     
             debugger;
             const date_picker_element = document.querySelector('.date-picker');
             const selected_date_element = document.querySelector('.date-picker .selected-date');
@@ -117,7 +100,6 @@ export class Visual implements IVisual {
             const months = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'];
             const daysOfWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 
-            //  На этой строке падает, потому что здесь date_picker_element равен null
             date_picker_element.addEventListener('click', toggleDatePicker);
 
             let date = new Date();
@@ -135,11 +117,12 @@ export class Visual implements IVisual {
             mth_element.textContent = months[month] + ' ' + year;
 
             selected_date_element.textContent = formatDate(date);
-            //selected_date_element.dataset.value = selectedDate;
 
             populateDates();
 
             date_picker_element.addEventListener('click', toggleDatePicker);
+            next_mth_element.addEventListener('click', goToNextMonth);
+            prev_mth_element.addEventListener('click', goToPrevMonth);
 
 
             function toggleDatePicker(e) {
@@ -161,31 +144,31 @@ export class Visual implements IVisual {
             function goToNextMonth(e) { //switching to next month
                 month++;
                 if (month > 11) {
-                  month = 0;
-                  year++;
+                    month = 0;
+                    year++;
                 }
                 mth_element.textContent = months[month] + ' ' + year;
                 populateDates();
-              }
-              
-              function goToPrevMonth(e) { //switching to prev. month
+            }
+
+            function goToPrevMonth(e) { //switching to prev. month
                 month--;
                 if (month < 0) {
-                  month = 11;
-                  year--;
+                    month = 11;
+                    year--;
                 }
                 mth_element.textContent = months[month] + ' ' + year;
                 populateDates();
-              }
+            }
 
             window.addEventListener('keydown', function (e) { //switching from arrow keys
                 if (e.keyCode == 37) {
-                  goToPrevMonth(e);
+                    goToPrevMonth(e);
                 }
                 if (e.keyCode == 39) {
-                  goToNextMonth(e);
+                    goToNextMonth(e);
                 }
-              });
+            });
 
             function populateDates() {  //rendering calendar
                 days_element.innerHTML = '';
@@ -206,7 +189,7 @@ export class Visual implements IVisual {
                     let day = currentDate.getDate();
                     const day_element = document.createElement('div');
                     day_element.classList.add('day');
-                    //day_element.textContent = day;
+                    day_element.textContent = day.toString();
 
 
 
@@ -246,10 +229,6 @@ export class Visual implements IVisual {
                 let year = d.getFullYear();
                 return day + '.' + month + '.' + year;
             }
-        }
-        catch (e) {
-            debugger;
-        }
 
     }
 
