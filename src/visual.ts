@@ -21,6 +21,10 @@ export class Visual implements IVisual {
 
     constructor(options: VisualConstructorOptions) {
 
+        debugger;
+        try {
+
+        
         this.root = d3.select(options.element);
 
 
@@ -80,11 +84,15 @@ export class Visual implements IVisual {
         days
             .append("div")
             .classed("day", true);
-
+        }
+        catch(ex) {
+            debugger;
+        }
     }
 
 
     public update(options: VisualUpdateOptions) {
+        debugger;
 
         const date_picker_element = document.querySelector('.date-picker');
         const selected_date_element = document.querySelector('.date-picker .selected-date');
